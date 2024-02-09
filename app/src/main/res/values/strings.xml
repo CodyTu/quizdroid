@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">quizdroid</string>
+    <string name="math">Mathematics is the science and study of quality, structure, space, and change. Mathematicians seek out patterns, formulate new conjectures, and establish truth by rigorous deduction from appropriately chosen axioms and definitions.</string>
+    <string name="physics">Physics is the branch of science that deals with the structure of matter and how the fundamental constituents of the universe interact. It studies objects ranging from the very small using quantum mechanics to the entire universe using general relativity.</string>
+    <string name="marvel">Marvel Comics is an American media and entertainment company regarded as one of the “big two” publishers in the comics industry. Its parent company, Marvel Entertainment, is a wholly owned subsidiary of the Disney Company.</string>
+    <string-array name="mathQ">
+        <item>Find 5 + 7 + 9</item>
+        <item>On dividing 426 by 4, we get the remainder as</item>
+        <item>Simplify the expression: 15 + 10 ÷ 5 = ?</item>
+        <item>What is the value of t, if m + 2 = n and n = 3?</item>
+        <item>On converting 32 yards to foot, we get</item>
+    </string-array>
+    <string-array name="physicsQ">
+        <item>The slope of the position time graph of an object moving with negative velocity is?</item>
+        <item>The SI unit of displacement is</item>
+    </string-array>
+    <string-array name="marvelQ">
+        <item>Who is the strongest Avenger?</item>
+        <item>What is Iron Man\'s real name?</item>
+        <item>What is the name of Thor\'s hammer?</item>
+    </string-array>
+</resources>
