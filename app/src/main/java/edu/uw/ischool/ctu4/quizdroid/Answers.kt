@@ -15,42 +15,43 @@ class Answers : AppCompatActivity() {
 
         val answer = intent.getStringExtra("answer")
         val currentQ = intent.getIntExtra("currentQuestion", 0)
-        val currentTopic = intent.getStringArrayExtra("currentTopic")?.asList()
+//        val currentTopic = intent.getStringArrayExtra("currentTopic")?.asList()
         var score = intent.getIntExtra("score", 0)
         val topic = intent.getStringExtra("topic")
-        val correctAnswersM: List<String> = listOf("21", "2", "17", "1", "96 ft")
-        val correctAnswersP: List<String> = listOf("Negative", "Meter")
-        val correctAnswersMv: List<String> = listOf("Thor", "Tony Stark", "Mjolnir")
+        val quiz = QuizApp()
+//        val correctAnswersM: List<String> = listOf("21", "2", "17", "1", "96 ft")
+//        val correctAnswersP: List<String> = listOf("Negative", "Meter")
+//        val correctAnswersMv: List<String> = listOf("Thor", "Tony Stark", "Mjolnir")
 
         val correct = findViewById<TextView>(R.id.correct)
         val outOf = findViewById<TextView>(R.id.outOf)
         val next = findViewById<Button>(R.id.next)
 
-        var current = correctAnswersM
+        var current = quiz.getTopics()[0]
         when(topic) {
-            "physics" -> current = correctAnswersP
-            "marvel" -> current = correctAnswersMv
+            "physics" -> current = quiz.getTopics()[1]
+            "marvel" -> current = quiz.getTopics()[2]
         }
+        val correctAnswer = current.questions[currentQ].answers[(current.questions[currentQ].correctAnswer) - 1]
 
-        correct.setText("Your Answer: ${answer}; Correct Answer: ${current[currentQ]}")
+        correct.setText("Your Answer: ${answer}; Correct Answer: ${correctAnswer}")
 
-        if (answer == current[currentQ]) {
+        if (answer == correctAnswer) {
             score += 1
         }
-        outOf.setText("You have ${score} out of ${currentTopic?.size}")
+        outOf.setText("You have ${score} out of ${current.questions.size}")
 
-        if(currentQ == currentTopic?.size?.minus(1) ?: "") {
+        if(currentQ == current.questions.size - 1) {
             next.setText("Finish")
         } else {
             next.setText("Next")
         }
 
             next.setOnClickListener({
-                if(currentQ != currentTopic?.size?.minus(1) ?: "") {
+                if(currentQ < current.questions.size - 1) {
                     val intent = Intent(this, Questions::class.java)
                     intent.putExtra("currentQuestion", currentQ + 1)
                     intent.putExtra("score", score)
-                    intent.putExtra("currentTopic", currentTopic?.toTypedArray())
                     intent.putExtra("topic", topic)
                     startActivity(intent)
                 } else {

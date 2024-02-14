@@ -15,17 +15,30 @@ class TopicOverview : AppCompatActivity() {
         setContentView(R.layout.activity_topic_overview)
 
         val topic: String = intent.getStringExtra("key").toString()
+
+        val quiz = QuizApp()
         val descriptionTxt = findViewById<TextView>(R.id.description)
+        val overviewTitle = findViewById<TextView>(R.id.overviewTitle)
         when(topic) {
-            "math" -> descriptionTxt.setText(getString(R.string.math))
-            "physics" -> descriptionTxt.setText(getString(R.string.physics))
-            "marvel" -> descriptionTxt.setText(getString(R.string.marvel))
+            "math" -> {
+                overviewTitle.text = quiz.getTopics()[0].title
+                descriptionTxt.setText(quiz.getTopics()[0].long_description)
+            }
+            "physics" -> {
+                overviewTitle.text = quiz.getTopics()[1].title
+                descriptionTxt.setText(quiz.getTopics()[1].long_description)
+            }
+            "marvel" -> {
+                overviewTitle.text = quiz.getTopics()[2].title
+                descriptionTxt.setText(quiz.getTopics()[2].long_description)
+            }
         }
+
         val totalQuestions = findViewById<TextView>(R.id.totalQuestions)
-        var currentTopic: List<String> = resources.getStringArray(R.array.mathQ).asList()
+        var currentTopic: List<TopicRepository.Question> = quiz.getTopics()[0].questions
         when(topic) {
-            "physics" -> currentTopic = resources.getStringArray(R.array.physicsQ).asList()
-            "marvel" -> currentTopic = resources.getStringArray(R.array.marvelQ).asList()
+            "physics" -> currentTopic = quiz.getTopics()[1].questions
+            "marvel" -> currentTopic = quiz.getTopics()[2].questions
         }
 
         totalQuestions.setText("Total Number of Questions: ${currentTopic.size}")
@@ -33,7 +46,6 @@ class TopicOverview : AppCompatActivity() {
         val begin = findViewById<Button>(R.id.begin)
         begin.setOnClickListener({
             val intent = Intent(this, Questions::class.java)
-            intent.putExtra("currentTopic", currentTopic.toTypedArray())
             intent.putExtra("currentQuestion", 0)
             intent.putExtra("score", 0)
             intent.putExtra("topic", topic)
