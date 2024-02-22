@@ -1,0 +1,117 @@
+[
+  { "title": "Math",
+    "desc": "Math is an area of knowledge that includes the topics of numbers, formulas and related structures, shapes and the spaces in which they are contained, and quantities and their changes.",
+    "questions": [
+      {
+        "text": "Find 5 + 7 + 9",
+        "answer": "4",
+        "answers": [
+          "20",
+          "12",
+          "14",
+          "21"
+        ]
+      },
+      {
+        "text": "On dividing 426 by 4, we get the remainder as",
+        "answer": "2",
+        "answers": [
+          "0",
+          "2",
+          "4",
+          "6"
+        ]
+      },
+      {
+        "text": "Simplify the expression: 15 + 10 ÷ 5 = ?",
+        "answer": "1",
+        "answers": [
+          "17",
+          "15",
+          "5",
+          "10"
+        ]
+      },
+      {
+        "text": "What is the value of t, if m + 2 = n and n = 3?",
+        "answer": "1",
+        "answers": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ]
+      },
+      {
+        "text": "On converting 32 yards to foot, we get",
+        "answer": "2",
+        "answers": [
+          "960 ft",
+          "96 ft",
+          "0.96 ft",
+          "0.096 ft"
+        ]
+      }
+    ]
+  },
+  { "title": "Physics",
+    "desc": "Physics is the branch of science that deals with the structure of matter and how the fundamental constituents of the universe interact.",
+    "questions": [
+      {
+        "text": "The slope of the position time graph of an object moving with negative velocity is?",
+        "answer": "2",
+        "answers": [
+          "Zero",
+          "Negative",
+          "Positive",
+          "Inifity"
+        ]
+      },
+      {
+        "text": "The SI unit of displacement is",
+        "answer": "3",
+        "answers": [
+          "Kilometer",
+          "Centimeter",
+          "Meter",
+          "Millimeter"
+        ]
+      }
+    ]
+  },
+  { "title": "Marvel",
+    "desc": "Marvel is an American media and entertainment company regarded as one of the “big two” publishers in the comics industry.",
+    "questions": [
+      {
+        "text": "Who is the strongest Avenger?",
+        "answer": "3",
+        "answers": [
+          "Hulk",
+          "Iron Man",
+          "Thor",
+          "Captain America"
+        ]
+      },
+      {
+        "text": "What is Iron Man's real name?",
+        "answer": "3",
+        "answers": [
+          "Bruce Banner",
+          "Steve Rogers",
+          "Tony Stark",
+          "Peter Parker"
+        ]
+      },
+      {
+        "text": "What is the name of Thor's hammer?",
+        "answer": "1",
+        "answers": [
+          "Mjolnir",
+          "Stormbreaker",
+          "Gungnir",
+          "Iron Hammer"
+        ]
+      }
+    ]
+  }
+]
