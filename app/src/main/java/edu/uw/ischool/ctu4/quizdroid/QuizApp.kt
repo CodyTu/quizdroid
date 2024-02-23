@@ -1,13 +1,20 @@
 package edu.uw.ischool.ctu4.quizdroid
 
 import android.app.Application
+import android.app.DownloadManager
 import android.content.Context
+import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Message
 import android.renderscript.ScriptGroup.Input
 import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import android.widget.Toast
+import androidx.core.net.toUri
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -18,135 +25,32 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
 import java.io.InputStream
+import java.io.InputStreamReader
+import java.lang.Exception
+import java.net.HttpURLConnection
+import java.net.MalformedURLException
+import java.net.URL
 import java.nio.charset.Charset
+
 
 class QuizApp : TopicRepository, android.app.Application() {
     var MESSAGE: String = "edu.uw.ischool.ctu4.quizapp"
     override fun onCreate() {
         super.onCreate()
         Log.i(MESSAGE, "QuizApp is loaded and running")
-        val data = "[\n" +
-                "  { \"title\": \"Math\",\n" +
-                "    \"desc\": \"Math is an area of knowledge that includes the topics of numbers, formulas and related structures, shapes and the spaces in which they are contained, and quantities and their changes.\",\n" +
-                "    \"questions\": [\n" +
-                "      {\n" +
-                "        \"text\": \"Find 5 + 7 + 9\",\n" +
-                "        \"answer\": \"4\",\n" +
-                "        \"answers\": [\n" +
-                "          \"20\",\n" +
-                "          \"12\",\n" +
-                "          \"14\",\n" +
-                "          \"21\"\n" +
-                "        ]\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"text\": \"On dividing 426 by 4, we get the remainder as\",\n" +
-                "        \"answer\": \"2\",\n" +
-                "        \"answers\": [\n" +
-                "          \"0\",\n" +
-                "          \"2\",\n" +
-                "          \"4\",\n" +
-                "          \"6\"\n" +
-                "        ]\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"text\": \"Simplify the expression: 15 + 10 ÷ 5 = ?\",\n" +
-                "        \"answer\": \"1\",\n" +
-                "        \"answers\": [\n" +
-                "          \"17\",\n" +
-                "          \"15\",\n" +
-                "          \"5\",\n" +
-                "          \"10\"\n" +
-                "        ]\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"text\": \"What is the value of t, if m + 2 = n and n = 3?\",\n" +
-                "        \"answer\": \"1\",\n" +
-                "        \"answers\": [\n" +
-                "          \"1\",\n" +
-                "          \"2\",\n" +
-                "          \"3\",\n" +
-                "          \"4\"\n" +
-                "        ]\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"text\": \"On converting 32 yards to foot, we get\",\n" +
-                "        \"answer\": \"2\",\n" +
-                "        \"answers\": [\n" +
-                "          \"960 ft\",\n" +
-                "          \"96 ft\",\n" +
-                "          \"0.96 ft\",\n" +
-                "          \"0.096 ft\"\n" +
-                "        ]\n" +
-                "      }\n" +
-                "    ]\n" +
-                "  },\n" +
-                "  { \"title\": \"Physics\",\n" +
-                "    \"desc\": \"Physics is the branch of science that deals with the structure of matter and how the fundamental constituents of the universe interact.\",\n" +
-                "    \"questions\": [\n" +
-                "      {\n" +
-                "        \"text\": \"The slope of the position time graph of an object moving with negative velocity is?\",\n" +
-                "        \"answer\": \"2\",\n" +
-                "        \"answers\": [\n" +
-                "          \"Zero\",\n" +
-                "          \"Negative\",\n" +
-                "          \"Positive\",\n" +
-                "          \"Inifity\"\n" +
-                "        ]\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"text\": \"The SI unit of displacement is\",\n" +
-                "        \"answer\": \"3\",\n" +
-                "        \"answers\": [\n" +
-                "          \"Kilometer\",\n" +
-                "          \"Centimeter\",\n" +
-                "          \"Meter\",\n" +
-                "          \"Millimeter\"\n" +
-                "        ]\n" +
-                "      }\n" +
-                "    ]\n" +
-                "  },\n" +
-                "  { \"title\": \"Marvel\",\n" +
-                "    \"desc\": \"Marvel is an American media and entertainment company regarded as one of the “big two” publishers in the comics industry.\",\n" +
-                "    \"questions\": [\n" +
-                "      {\n" +
-                "        \"text\": \"Who is the strongest Avenger?\",\n" +
-                "        \"answer\": \"3\",\n" +
-                "        \"answers\": [\n" +
-                "          \"Hulk\",\n" +
-                "          \"Iron Man\",\n" +
-                "          \"Thor\",\n" +
-                "          \"Captain America\"\n" +
-                "        ]\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"text\": \"What is Iron Man's real name?\",\n" +
-                "        \"answer\": \"3\",\n" +
-                "        \"answers\": [\n" +
-                "          \"Bruce Banner\",\n" +
-                "          \"Steve Rogers\",\n" +
-                "          \"Tony Stark\",\n" +
-                "          \"Peter Parker\"\n" +
-                "        ]\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"text\": \"What is the name of Thor's hammer?\",\n" +
-                "        \"answer\": \"1\",\n" +
-                "        \"answers\": [\n" +
-                "          \"Mjolnir\",\n" +
-                "          \"Stormbreaker\",\n" +
-                "          \"Gungnir\",\n" +
-                "          \"Iron Hammer\"\n" +
-                "        ]\n" +
-                "      }\n" +
-                "    ]\n" +
-                "  }\n" +
-                "]"
-        writeData(data)
-    }
+        val sp = getApplicationContext().getSharedPreferences("URLPrefs", Context.MODE_PRIVATE)
+        val url = sp.getString("URL", "https://tednewardsandbox.site44.com/questions.json")
 
-    fun readJsonFromAssets(context: Context, fileName: String): String {
-        return context.assets.open(fileName).bufferedReader().use { it.readText() }
+        Toast.makeText(this, url, Toast.LENGTH_SHORT).show()
+
+        val queue = Volley.newRequestQueue(this)
+        val stringRequest = StringRequest(Request.Method.GET, url,
+            Response.Listener { response ->
+                writeData(response)
+            },
+            Response.ErrorListener { Log.d(MESSAGE, "That didn't work") })
+
+        queue.add(stringRequest)
     }
 
     fun writeData(data : String) {

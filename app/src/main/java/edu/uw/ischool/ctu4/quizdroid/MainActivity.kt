@@ -2,18 +2,24 @@ package edu.uw.ischool.ctu4.quizdroid
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toolbar
+import androidx.core.content.getSystemService
 import java.io.IOException
 import java.nio.charset.Charset
+import java.security.AccessController.getContext
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +37,9 @@ class MainActivity : AppCompatActivity() {
         val physDes = findViewById<TextView>(R.id.physDes)
         val marvelDes = findViewById<TextView>(R.id.marvelDes)
 
+        val offline = findViewById<TextView>(R.id.offline)
+        val airplane = findViewById<Button>(R.id.airplaneMode)
+
         val quiz = QuizApp()
         math.text = quiz.getTopics()[0].title
         physics.text = quiz.getTopics()[1].title
@@ -40,10 +49,22 @@ class MainActivity : AppCompatActivity() {
         physDes.text = quiz.getTopics()[1].short_description
         marvelDes.text = quiz.getTopics()[2].short_description
 
-//        val sp = getApplicationContext().getSharedPreferences("URLPrefs", Context.MODE_PRIVATE)
-//        val url = sp.getString("URL")
-//        Toast.makeText()
+        if (!isOnline(this) && Settings.System.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) == 0) {
+            throw Exception("No internet access")
+        }
 
+        if (Settings.System.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) == 1) {
+            offline.text = "You are currently offline"
+            airplane.setVisibility(View.VISIBLE)
+
+        } else {
+            offline.text = ""
+            airplane.setVisibility(View.GONE)
+        }
+
+        airplane.setOnClickListener({
+            startActivityForResult(Intent(android.provider.Settings.ACTION_SETTINGS), 0)
+        })
 
         math.setOnClickListener({
             val intent = Intent(this, TopicOverview::class.java)
@@ -81,20 +102,25 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun getJSONFromAssets(): String? {
-        var json: String?
-        val charset: Charset = Charsets.UTF_8
-        try {
-            val `is` = assets.open("questions.json")
-            val size = `is`.available()
-            val buffer = ByteArray(size)
-            `is`.read(buffer)
-            `is`.close()
-            json = String(buffer, charset)
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            return null
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
         }
-        return json
+        return false
     }
 }
