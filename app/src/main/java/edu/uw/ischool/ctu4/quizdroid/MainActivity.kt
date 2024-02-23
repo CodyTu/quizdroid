@@ -1,5 +1,6 @@
 package edu.uw.ischool.ctu4.quizdroid
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import android.widget.Toolbar
 import java.io.IOException
 import java.nio.charset.Charset
@@ -37,6 +39,10 @@ class MainActivity : AppCompatActivity() {
         mathDes.text = quiz.getTopics()[0].short_description
         physDes.text = quiz.getTopics()[1].short_description
         marvelDes.text = quiz.getTopics()[2].short_description
+
+//        val sp = getApplicationContext().getSharedPreferences("URLPrefs", Context.MODE_PRIVATE)
+//        val url = sp.getString("URL")
+//        Toast.makeText()
 
 
         math.setOnClickListener({

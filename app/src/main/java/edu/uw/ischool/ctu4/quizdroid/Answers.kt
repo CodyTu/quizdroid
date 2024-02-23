@@ -27,6 +27,8 @@ class Answers : AppCompatActivity() {
         val outOf = findViewById<TextView>(R.id.outOf)
         val next = findViewById<Button>(R.id.next)
 
+        val url = "http://tednewardsandbox.site44.com/questions.json"
+
         var current = quiz.getTopics()[0]
         when(topic) {
             "physics" -> current = quiz.getTopics()[1]
